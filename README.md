@@ -32,7 +32,7 @@ brew install nlohmann-json
 ```
 
 2. (For macbook) (Faced some error regarding openssl in boost missing in ARM64 device...)
-`g++ -std=c++17 -o ./binance_ws.cpp orderbook.cpp -I/opt/homebrew/include -L/opt/homebrew/opt/openssl/lib -L/opt/homebrew/opt/boost/lib -lssl -lcrypto -lpthread -lboost_system`
+`g++ -std=c++17 -o ./binance_ws.cpp orderbook.cpp -I/opt/homebrew/include -L/opt/homebrew/opt/openssl/lib -L/opt/homebrew/opt/boost/lib -I/opt/homebrew/opt/nlohmann-json/include/nlohmann -L/opt/homebrew/opt/curl/lib -lssl -lcrypto -lpthread -lboost_system -lcurl`
 - I/path/to/openssl/include: Path to OpenSSL header files.
 - I/path/to/boost/include: Path to Boost header files (if applicable).
 - L/path/to/openssl/lib: Path to OpenSSL library files.
