@@ -1,5 +1,15 @@
 # Binance order book
 
+- [Binance order book](#binance-order-book)
+  - [Goal](#goal)
+  - [General Notes (Abstracted)](#general-notes-abstracted)
+  - [Flow](#flow)
+  - [Steps](#steps)
+  - [Pointers](#pointers)
+  - [Developer Guide](#developer-guide)
+  - [Demo](#demo)
+  - [References](#references)
+
 ## Goal
 - CLI, query the user for binance-style symbol
 - prints out top 5 levels of the orderbook (when a snapshot or depth comes in) 
@@ -29,10 +39,23 @@ brew install websocketpp
 brew install boost
 brew install curl
 brew install nlohmann-json
+brew install openssl // if applicable
 ```
 
 2. (For macbook) (Faced some error regarding openssl in boost missing in ARM64 device...)
-`g++ -std=c++17 -o ./binance_ws.cpp orderbook.cpp -I/opt/homebrew/include -L/opt/homebrew/opt/openssl/lib -L/opt/homebrew/opt/boost/lib -I/opt/homebrew/opt/nlohmann-json/include/nlohmann -L/opt/homebrew/opt/curl/lib -lssl -lcrypto -lpthread -lboost_system -lcurl`
+```
+g++ -std=c++17 -o ./binance_local_book orderbook.cpp \
+    -I/opt/homebrew/include \
+    -L/opt/homebrew/opt/openssl/lib \
+    -L/opt/homebrew/opt/boost/lib \
+    -I/opt/homebrew/opt/nlohmann-json/include/nlohmann \
+    -L/opt/homebrew/opt/curl/lib \
+    -lssl \
+    -lcrypto \
+    -lpthread \
+    -lboost_system \
+    -lcurl
+```
 - I/path/to/openssl/include: Path to OpenSSL header files.
 - I/path/to/boost/include: Path to Boost header files (if applicable).
 - L/path/to/openssl/lib: Path to OpenSSL library files.
@@ -49,4 +72,29 @@ brew install nlohmann-json
 - `-std=c++17` need to tell compiler cpp verion
 - `openssl` is required from `boost`, dk why not in ARM64 device
 
+## Developer Guide
+**`fetchSnapshot`**
 
+Fetches the current order book snapshot from the Binance API.
+
+**`initOrderBook()`**
+
+Initialise the order book `bids` and `asks` which are implemented using `map` to maintain the sorted order
+
+**`manageOrderBook()`**
+
+Checks whether or not is a `bid` or an `ask`
+- If the price exists within the order book then we need to update the quantity, if it reaches 0 then we need to remove it
+- If a new price update comes in, then add into our order book and remove the lowest price for `bid` or the highest price for `ask` 
+
+**`updateOrderBook(json jsonMessage)`**
+
+Given the `lastUpdatedId` we check whether or not the current update is aligned. If it's aligned then we update the book accordingly using `manageOrderBook()`.
+- If the message is old, then we can just skip it
+- If the message is so new, that our orderbook is outdated, then we need to reset our order book by calling `initOrderBook()`
+
+## Demo
+[click here to watch the demo](https://drive.google.com/file/d/1qfhn1H6fhu34cv1RzCeE1jNkILmUvGaO/view?usp=sharing)
+
+## References
+- [To setup websocket in CPP](https://medium.com/nerd-for-tech/your-first-c-websocket-client-4e7b36353d26)
