@@ -1,2 +1,5 @@
 
-/*.pdf
+*.pdf
+.DS_Store
+.vs_code
+
