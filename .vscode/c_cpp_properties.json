@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/homebrew/include",  // general level
+                "/opt/homebrew/opt/nlohmann-json/include/nlohmann"
+                // "/opt/homebrew/include/websocketpp",
+                // "/opt/homebrew/include/boost",
+                // "/opt/homebrew/opt/curl"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64",
+            "compilerPath": "/usr/bin/g++"
+        }
+    ],
+    "version": 4
+}
